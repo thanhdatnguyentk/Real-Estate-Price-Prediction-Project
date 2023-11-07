@@ -1,17 +1,18 @@
 from flask import Flask, request, jsonify
 import until
+
 app = Flask(__name__)
 
-@app.route('/get_location_names')
-def get_location_name():
+@app.route('/get_location_names', methods=['GET'])
+def get_location_names():
     response = jsonify({
-        'location': until.get_location_names()
+        'locations': until.get_location_names()
     })
     response.headers.add('Access-Control-Allow-Origin', '*')
 
     return response
 
-@app.route('/predict_home_price', methods=['POST'])
+@app.route('/predict_home_price', methods=['GET', 'POST'])
 def predict_home_price():
     total_sqft = float(request.form['total_sqft'])
     location = request.form['location']
@@ -21,10 +22,11 @@ def predict_home_price():
     response = jsonify({
         'estimated_price': until.get_estimated_price(location,total_sqft,bhk,bath)
     })
-    response.headers.add('Access-Control-Allow-Origin','*')
+    response.headers.add('Access-Control-Allow-Origin', '*')
+
     return response
 
-
 if __name__ == "__main__":
-    print("Staring Python Flask Server For Home Price Prediction....")
+    print("Starting Python Flask Server For Home Price Prediction...")
+    until.load_saved_artifacts()
     app.run()

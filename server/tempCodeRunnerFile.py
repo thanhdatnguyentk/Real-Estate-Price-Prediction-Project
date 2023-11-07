@@ -1,1 +1,1 @@
-get_location_name
+./artifacts/banglore_home_prices_model.pick
